@@ -1,6 +1,6 @@
 package me.junhua.system.service.impl;
 
-import me.junhua.system.dto.RoleCreateDTO;
+import me.junhua.system.dto.save.CreateRoleDTO;
 import me.junhua.system.entity.SysRole;
 import me.junhua.system.mapper.SysRoleMapper;
 import me.junhua.system.service.ISysRoleService;
@@ -26,7 +26,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public Long createRole(RoleCreateDTO roleCreateDTO, Integer type) {
+    public Long createRole(CreateRoleDTO createRoleDTO, Integer type) {
         return null;
     }
 }

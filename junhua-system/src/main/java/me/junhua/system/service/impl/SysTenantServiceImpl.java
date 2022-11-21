@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import me.junhua.common.util.BeanCopierUtils;
-import me.junhua.system.dto.CreateTenantDTO;
-import me.junhua.system.dto.QueryTenantDTO;
-import me.junhua.system.dto.RoleCreateDTO;
-import me.junhua.system.dto.UpdateTenantDTO;
+import me.junhua.system.dto.query.QueryTenantDTO;
+import me.junhua.system.dto.save.CreateRoleDTO;
+import me.junhua.system.dto.save.CreateTenantDTO;
+import me.junhua.system.dto.update.UpdateTenantDTO;
 import me.junhua.system.entity.SysTenant;
 import me.junhua.system.entity.SysTenantPackage;
 import me.junhua.system.mapper.SysTenantMapper;
@@ -18,7 +18,9 @@ import me.junhua.system.service.ISysTenantPackageService;
 import me.junhua.system.service.ISysTenantService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,7 +41,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     private final ISysRoleService roleService;
 
     @Override
-    public Page<SysTenant> selectTenantList(QueryTenantDTO queryTenantDTO, Page<SysTenant> page) {
+    public Page<SysTenant> selectPageList(QueryTenantDTO queryTenantDTO, Page<SysTenant> page) {
         Wrapper<SysTenant> wrapper = Wrappers.lambdaQuery(SysTenant.class)
                 .like(StringUtils.isNotBlank(queryTenantDTO.getTenantName()), SysTenant::getTenantName, queryTenantDTO.getTenantName())
                 .like(StringUtils.isNotBlank(queryTenantDTO.getContacts()), SysTenant::getContacts, queryTenantDTO.getContacts())
@@ -49,7 +51,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
     }
 
     @Override
-    public Long createTenant(CreateTenantDTO createTenantDTO) {
+    public Long saveTenant(CreateTenantDTO createTenantDTO) {
         SysTenantPackage tenantPackage = tenantPackageService.validTenantPackage(createTenantDTO.getTenantPackageId());
         SysTenant tenant = BeanCopierUtils.copyByClass(createTenantDTO, SysTenant.class);
         // 存储租户信息
@@ -66,11 +68,11 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
 
     private Long createRole(SysTenantPackage tenantPackage) {
         // 创建角色
-        RoleCreateDTO roleCreateDTO = new RoleCreateDTO();
-        roleCreateDTO.setRoleName("租户管理员");
-        roleCreateDTO.setComments("系统自动生成");
+        CreateRoleDTO createRoleDTO = new CreateRoleDTO();
+        createRoleDTO.setRoleName("租户管理员");
+        createRoleDTO.setComments("系统自动生成");
 
-        Long roleId = roleService.createRole(roleCreateDTO, 12);
+        Long roleId = roleService.createRole(createRoleDTO, 12);
         // 分配权限
         roleService.assignRoleResource(roleId, tenantPackage.getResourceIds());
         return roleId;
@@ -82,8 +84,9 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         return this.updateById(tenant);
     }
 
+    @Transactional
     @Override
-    public boolean deleteTenant(Long tenantId) {
-        return this.removeById(tenantId);
+    public boolean batchDelete(List<Long> idList) {
+        return false;
     }
 }

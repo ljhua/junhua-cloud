@@ -1,13 +1,18 @@
-package me.junhua.system.dto;
+package me.junhua.system.dto.update;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class CreateTenantDTO {
+public class UpdateTenantDTO {
 
+    @ApiModelProperty("主键")
+    private Long id;
+
+    @ApiModelProperty("租户套餐ID")
     private Long tenantPackageId;
 
     @ApiModelProperty("租户名称")
@@ -31,6 +36,7 @@ public class CreateTenantDTO {
     @ApiModelProperty("账号限额")
     private Long accountLimit;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("过期时间")
     private LocalDateTime expireTime;
 

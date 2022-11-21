@@ -1,33 +1,13 @@
-package me.junhua.system.entity;
+package me.junhua.system.dto.update;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-/**
- * <p>
- * 组织表
- * </p>
- *
- * @author ljhua
- * @since 2022-11-12
- */
-@TableName("sys_org")
-@ApiModel(value = "SysOrg对象", description = "组织表")
 @Data
-public class SysOrg extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
+public class UpdateOrgDTO {
 
     @ApiModelProperty("id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
-    @ApiModelProperty("租户id")
-    private Long tenantId;
 
     @ApiModelProperty("父组织id")
     private Long parentId;

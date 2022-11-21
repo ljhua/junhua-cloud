@@ -1,4 +1,4 @@
-package me.junhua.system.dto;
+package me.junhua.system.dto.view;
 
 import lombok.Data;
 import me.junhua.system.entity.SysDic;

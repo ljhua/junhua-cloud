@@ -1,6 +1,6 @@
 package me.junhua.system.service;
 
-import me.junhua.system.dto.RoleCreateDTO;
+import me.junhua.system.dto.save.CreateRoleDTO;
 import me.junhua.system.entity.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,5 +18,5 @@ public interface ISysRoleService extends IService<SysRole> {
 
     void assignRoleResource(Long roleId, Set<Long> resourceIds);
 
-    Long createRole(RoleCreateDTO roleCreateDTO, Integer type);
+    Long createRole(CreateRoleDTO createRoleDTO, Integer type);
 }

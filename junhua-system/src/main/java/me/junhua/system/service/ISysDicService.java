@@ -1,10 +1,10 @@
 package me.junhua.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import me.junhua.system.dto.DicDTO;
-import me.junhua.system.dto.SaveDicDTO;
-import me.junhua.system.dto.QueryDicDTO;
-import me.junhua.system.dto.UpdateDicDTO;
+import me.junhua.system.dto.view.DicDTO;
+import me.junhua.system.dto.save.CreateDicDTO;
+import me.junhua.system.dto.query.QueryDicDTO;
+import me.junhua.system.dto.update.UpdateDicDTO;
 import me.junhua.system.entity.SysDic;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -22,15 +22,15 @@ public interface ISysDicService extends IService<SysDic> {
 
     boolean updateDic(UpdateDicDTO updateDicDTO);
 
-    boolean saveDic(SaveDicDTO saveDicDTO);
+    boolean saveDic(CreateDicDTO createDicDTO);
 
-    boolean deleteDic(Long dicId);
+    boolean batchDelete(List<Long> dicIdList);
 
-    boolean batchDeleteDic(List<Long> dicIdList);
-
-    Page<DicDTO> selectDicList(Page<DicDTO> page, QueryDicDTO queryDicDTO);
+    Page<DicDTO> selectPageList(Page<DicDTO> page, QueryDicDTO queryDicDTO);
 
     int countByPid(Long pid);
 
-    List<DicDTO> selectDicByPid(Long pid);
+    List<DicDTO> selectByPid(Long pid);
+
+    List<SysDic> getChildrenByDicCode(String dicCode);
 }

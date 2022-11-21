@@ -1,4 +1,4 @@
-package me.junhua.system.dto;
+package me.junhua.system.dto.update;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,7 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class SaveDicDTO {
+public class UpdateDicDTO {
+
+    @ApiModelProperty("主键")
+    private Long id;
 
     @ApiModelProperty("字典上级")
     private Long parentId;

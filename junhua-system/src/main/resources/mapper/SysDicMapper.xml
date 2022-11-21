@@ -7,7 +7,7 @@
         id, tenant_id, parent_id, dic_name, dic_code, dic_order, dic_status, comments, created_by, created_time, modified_by, modified_time, del_flag
     </sql>
 
-    <select id="getDicPageList" resultType="me.junhua.system.dto.DicDTO">
+    <select id="selectPageList" resultType="me.junhua.system.dto.view.DicDTO">
         select
         <include refid="Base_Column_List"/>
         from sys_dic
@@ -28,10 +28,17 @@
         </trim>
     </select>
 
-    <select id="selectDicByPid" resultType="me.junhua.system.dto.DicDTO">
+    <select id="selectByPid" resultType="me.junhua.system.dto.view.DicDTO">
         select
         <include refid="Base_Column_List"/>
         from sys_dic
         where del_flag = 0 and parent_id = #{pid}
+    </select>
+
+    <select id="getChildrenByDicCode" resultType="me.junhua.system.entity.SysDic">
+        select cdic.* from sys_dic pdic
+        inner join sys_dic cdic on pdic.id = cdic.parent_id
+        where pdic.dic_code = #{dicCode}
+        order by cdic.dic_order
     </select>
 </mapper>

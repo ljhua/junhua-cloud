@@ -2,8 +2,8 @@ package me.junhua.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import me.junhua.system.dto.DicDTO;
-import me.junhua.system.dto.QueryDicDTO;
+import me.junhua.system.dto.view.DicDTO;
+import me.junhua.system.dto.query.QueryDicDTO;
 import me.junhua.system.entity.SysDic;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +19,9 @@ import java.util.List;
  */
 public interface SysDicMapper extends BaseMapper<SysDic> {
 
-    Page<DicDTO> getDicPageList(Page<DicDTO> page, @Param("dic") QueryDicDTO dict);
+    Page<DicDTO> selectPageList(Page<DicDTO> page, @Param("dic") QueryDicDTO dict);
 
-    List<DicDTO> selectDicByPid(Long pid);
+    List<DicDTO> selectByPid(Long pid);
+
+    List<SysDic> getChildrenByDicCode(String dicCode);
 }

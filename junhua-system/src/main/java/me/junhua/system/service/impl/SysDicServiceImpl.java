@@ -6,16 +6,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import me.junhua.common.util.BeanCopierUtils;
-import me.junhua.system.dto.DicDTO;
-import me.junhua.system.dto.QueryDicDTO;
-import me.junhua.system.dto.SaveDicDTO;
-import me.junhua.system.dto.UpdateDicDTO;
+import me.junhua.system.dto.query.QueryDicDTO;
+import me.junhua.system.dto.save.CreateDicDTO;
+import me.junhua.system.dto.update.UpdateDicDTO;
+import me.junhua.system.dto.view.DicDTO;
 import me.junhua.system.entity.SysDic;
 import me.junhua.system.mapper.SysDicMapper;
 import me.junhua.system.service.ISysDicService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,28 +35,19 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
     @Override
     public boolean updateDic(UpdateDicDTO updateDicDTO) {
         SysDic dic = BeanCopierUtils.copyByClass(updateDicDTO, SysDic.class);
+        dic.setModifiedTime(LocalDateTime.now());
         return this.updateById(dic);
     }
 
     @Override
-    public boolean saveDic(SaveDicDTO saveDicDTO) {
-        SysDic dic = BeanCopierUtils.copyByClass(saveDicDTO, SysDic.class);
+    public boolean saveDic(CreateDicDTO createDicDTO) {
+        SysDic dic = BeanCopierUtils.copyByClass(createDicDTO, SysDic.class);
+        dic.setCreatedTime(LocalDateTime.now());
         return this.save(dic);
     }
 
-    @Transactional
     @Override
-    public boolean deleteDic(Long dicId) {
-        // 删除子级
-        Wrapper<SysDic> wrapper = Wrappers.lambdaQuery(SysDic.class).eq(SysDic::getParentId, dicId);
-        this.remove(wrapper);
-        // 删除
-        this.removeById(dicId);
-        return true;
-    }
-
-    @Override
-    public boolean batchDeleteDic(List<Long> dicIdList) {
+    public boolean batchDelete(List<Long> dicIdList) {
         // 删除子级
         Wrapper<SysDic> wrapper = Wrappers.lambdaQuery(SysDic.class).in(SysDic::getParentId, dicIdList);
         this.remove(wrapper);
@@ -66,9 +57,9 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
     }
 
     @Override
-    public Page<DicDTO> selectDicList(Page<DicDTO> dicPageDTO, QueryDicDTO queryDicDTO) {
-        Page<DicDTO> dicPageList = dicMapper.getDicPageList(dicPageDTO, queryDicDTO);
-        List<DicDTO> records = dicPageList.getRecords();
+    public Page<DicDTO> selectPageList(Page<DicDTO> dicPageDTO, QueryDicDTO queryDicDTO) {
+        Page<DicDTO> dicPage = dicMapper.selectPageList(dicPageDTO, queryDicDTO);
+        List<DicDTO> records = dicPage.getRecords();
         records.stream().forEach(dicDTO -> {
             Long id = dicDTO.getId();
             int count = this.countByPid(id);
@@ -76,7 +67,7 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
                 dicDTO.setHasChildren(true);
             }
         });
-        return dicPageList;
+        return dicPage;
     }
 
     @Override
@@ -86,7 +77,12 @@ public class SysDicServiceImpl extends ServiceImpl<SysDicMapper, SysDic> impleme
     }
 
     @Override
-    public List<DicDTO> selectDicByPid(Long pid) {
-        return dicMapper.selectDicByPid(pid);
+    public List<DicDTO> selectByPid(Long pid) {
+        return dicMapper.selectByPid(pid);
+    }
+
+    @Override
+    public List<SysDic> getChildrenByDicCode(String dicCode) {
+        return dicMapper.getChildrenByDicCode(dicCode);
     }
 }

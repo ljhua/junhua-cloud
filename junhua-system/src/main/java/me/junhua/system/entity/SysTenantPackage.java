@@ -25,7 +25,7 @@ import java.util.Set;
 @TableName("sys_tenant_package")
 @ApiModel(value = "SysTenantPackage对象", description = "租户套餐表")
 @Data
-public class SysTenantPackage implements Serializable {
+public class SysTenantPackage extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,21 +42,4 @@ public class SysTenantPackage implements Serializable {
     @ApiModelProperty("关联的菜单ID")
     @TableField(typeHandler = JsonLongSetTypeHandler.class)
     private Set<Long> resourceIds;
-
-    @ApiModelProperty("创建者")
-    private Long createdBy;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("创建时间")
-    private LocalDateTime createdTime;
-
-    @ApiModelProperty("更新者")
-    private Long modifiedBy;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("更新时间")
-    private LocalDateTime modifiedTime;
-
-    @ApiModelProperty("1:删除 0:不删除")
-    private Integer delFlag;
 }

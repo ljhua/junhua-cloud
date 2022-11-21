@@ -1,10 +1,10 @@
-package me.junhua.system.dto;
+package me.junhua.system.dto.save;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class RoleCreateDTO {
+public class CreateRoleDTO {
 
     @ApiModelProperty("父id")
     private Long parentId;

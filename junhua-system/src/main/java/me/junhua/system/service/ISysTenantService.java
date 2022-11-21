@@ -1,11 +1,13 @@
 package me.junhua.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import me.junhua.system.dto.CreateTenantDTO;
-import me.junhua.system.dto.QueryTenantDTO;
-import me.junhua.system.dto.UpdateTenantDTO;
-import me.junhua.system.entity.SysTenant;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.junhua.system.dto.query.QueryTenantDTO;
+import me.junhua.system.dto.save.CreateTenantDTO;
+import me.junhua.system.dto.update.UpdateTenantDTO;
+import me.junhua.system.entity.SysTenant;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,11 +19,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISysTenantService extends IService<SysTenant> {
 
-    Page<SysTenant> selectTenantList(QueryTenantDTO queryTenantDTO, Page<SysTenant> page);
+    Page<SysTenant> selectPageList(QueryTenantDTO queryTenantDTO, Page<SysTenant> page);
 
-    Long createTenant(CreateTenantDTO createTenantDTO);
+    Long saveTenant(CreateTenantDTO createTenantDTO);
 
     boolean updateTenant(UpdateTenantDTO updateTenantDTO);
 
-    boolean deleteTenant(Long tenantId);
+    boolean batchDelete(List<Long> idList);
 }

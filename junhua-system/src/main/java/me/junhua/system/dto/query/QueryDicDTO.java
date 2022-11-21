@@ -1,4 +1,4 @@
-package me.junhua.system.dto;
+package me.junhua.system.dto.query;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

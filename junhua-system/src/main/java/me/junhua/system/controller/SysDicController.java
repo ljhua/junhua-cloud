@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import me.junhua.common.result.GenericPage;
 import me.junhua.common.result.PageResult;
 import me.junhua.common.result.Result;
-import me.junhua.system.dto.DicDTO;
-import me.junhua.system.dto.QueryDicDTO;
-import me.junhua.system.dto.SaveDicDTO;
-import me.junhua.system.dto.UpdateDicDTO;
+import me.junhua.system.dto.query.QueryDicDTO;
+import me.junhua.system.dto.save.CreateDicDTO;
+import me.junhua.system.dto.update.UpdateDicDTO;
+import me.junhua.system.dto.view.DicDTO;
 import me.junhua.system.entity.SysDic;
 import me.junhua.system.service.ISysDicService;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,68 +36,52 @@ public class SysDicController {
     @GetMapping(value = "/getPage")
     @ApiOperation(value = "分页列表")
     public Result<GenericPage<DicDTO>> getPage(QueryDicDTO queryDicDTO, Page<DicDTO> page) {
-        Page<DicDTO> dicPage = dicService.selectDicList(page, queryDicDTO);
+        Page<DicDTO> dicPage = dicService.selectPageList(page, queryDicDTO);
         return Result.data(PageResult.data(dicPage.getTotal(), dicPage.getRecords()));
     }
 
-    @GetMapping(value = "/getDicByPid")
-    @ApiOperation(value = "查询子级列表")
-    public Result<List<DicDTO>> getPage(Long pid) {
-        List<DicDTO> dicList = dicService.selectDicByPid(pid);
+    @GetMapping(value = "/getByPid")
+    @ApiOperation(value = "通过pid查询子级列表")
+    public Result<List<DicDTO>> getByPid(Long pid) {
+        List<DicDTO> dicList = dicService.selectByPid(pid);
         return Result.data(dicList);
     }
 
-    @PostMapping(value = "/save")
-    @ApiOperation(value = "新建字典")
-    public Result<Boolean> save(@Validated @RequestBody SaveDicDTO saveDicDTO) {
-        boolean result = dicService.saveDic(saveDicDTO);
+    @GetMapping(value = "/getChildrenByDicCode")
+    @ApiOperation(value = "通过dicCode查询子级列表")
+    public Result<List<SysDic>> getChildrenByDicCode(String dicCode) {
+        List<SysDic> dicList = dicService.getChildrenByDicCode(dicCode);
+        return Result.data(dicList);
+    }
+
+    @PostMapping(value = "/create")
+    @ApiOperation(value = "新增")
+    public Result<Boolean> create(@Validated @RequestBody CreateDicDTO createDicDTO) {
+        boolean result = dicService.saveDic(createDicDTO);
         return Result.data(result);
     }
 
     @PostMapping("/update")
-    @ApiOperation(value = "更新字典")
+    @ApiOperation(value = "更新")
     public Result<Boolean> update(@Validated @RequestBody UpdateDicDTO updateDicDTO) {
         boolean result = dicService.updateDic(updateDicDTO);
         return Result.data(result);
     }
 
     @GetMapping("/detail")
-    @ApiOperation(value = "查询字典")
-    public Result<SysDic> detail(@RequestParam Long dicId) {
-        SysDic dic = dicService.getById(dicId);
+    @ApiOperation(value = "详情")
+    public Result<SysDic> detail(@RequestParam Long id) {
+        SysDic dic = dicService.getById(id);
         return Result.data(dic);
     }
 
-    @PostMapping("/status/{dicId}/{dicStatus}")
-    @ApiOperation(value = "修改字典状态")
-    public Result<Boolean> updateStatus(@PathVariable Long dicId, @PathVariable Integer dicStatus) {
-        if (null == dicId || StringUtils.isEmpty(dicStatus)) {
-            return Result.error("ID和状态不能为空");
-        }
-        UpdateDicDTO updateDicDTO = new UpdateDicDTO();
-        updateDicDTO.setId(dicId);
-        updateDicDTO.setDicStatus(dicStatus);
-        boolean result = dicService.updateDic(updateDicDTO);
-        return Result.data(result);
-    }
-
-    @PostMapping(value = "/delete/{dicId}")
-    @ApiOperation(value = "删除字典")
-    public Result<Boolean> delete(@PathVariable Long dicId) {
-        if (null == dicId) {
-            return Result.error("ID不能为空");
-        }
-        boolean result = dicService.deleteDic(dicId);
-        return Result.data(result);
-    }
-
     @PostMapping("/batch/delete")
-    @ApiOperation(value = "批量删除字典")
-    public Result<Boolean> batchDelete(@RequestBody List<Long> dicIdList) {
-        if (CollectionUtils.isEmpty(dicIdList)) {
+    @ApiOperation(value = "批量删除")
+    public Result<Boolean> batchDelete(@RequestBody List<Long> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
             return Result.error("请选中要删除的数据！");
         }
-        boolean result = dicService.batchDeleteDic(dicIdList);
+        boolean result = dicService.batchDelete(idList);
         return Result.data(result);
     }
 }

@@ -2,4 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.junhua.system.mapper.SysOrgMapper">
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, parent_id, org_name, org_code, org_type_code, org_type_name, org_icon, org_level, org_status, province,city, area, street, comments,
+        created_by, created_time, modified_by, modified_time, del_flag
+    </sql>
+
+    <select id="selectPageList" resultType="me.junhua.system.dto.view.OrgDTO">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where del_flag = 0
+        <trim prefix="and (" suffix=")" prefixOverrides="and">
+            <if test="org.id != null">
+                and id = #{org.id}
+            </if>
+            <if test="org.parentId != null">
+                and parent_id = #{org.parentId}
+            </if>
+            <if test="org.orgName != null and org.orgName != ''">
+                and org_name like concat('%', #{org.orgName}, '%')
+            </if>
+            <if test="org.orgCode != null and org.orgCode != ''">
+                and org_code like concat('%', #{orgCode}, '%')
+            </if>
+        </trim>
+        order by org_level
+    </select>
+
+    <select id="selectByPid" resultType="me.junhua.system.dto.view.OrgDTO">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where del_flag = 0 and parent_id = #{pid}
+        order by org_level
+    </select>
 </mapper>

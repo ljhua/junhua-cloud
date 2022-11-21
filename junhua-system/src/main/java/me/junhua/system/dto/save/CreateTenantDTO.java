@@ -1,33 +1,13 @@
-package me.junhua.system.entity;
+package me.junhua.system.dto.save;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * <p>
- * 租户信息表
- * </p>
- *
- * @author ljhua
- * @since 2022-11-11
- */
-@TableName("sys_tenant")
-@ApiModel(value = "SysTenant对象", description = "租户信息表")
 @Data
-public class SysTenant extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty("主键")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+public class CreateTenantDTO {
 
     @ApiModelProperty("租户套餐ID")
     private Long tenantPackageId;

@@ -4,7 +4,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, tenant_id, parent_id, dic_name, dic_code, dic_order, dic_status, comments, created_by, created_time, modified_by, modified_time, del_flag
+        id, tenant_id, parent_id, dic_name, dic_code, sort, dic_status, comments, created_by, created_time, modified_by, modified_time, del_flag
     </sql>
 
     <select id="selectPageList" resultType="me.junhua.system.dto.view.DicDTO">
@@ -26,6 +26,7 @@
                 and dic_code like "%"#{dicCode}"%"
             </if>
         </trim>
+        order by sort
     </select>
 
     <select id="selectByPid" resultType="me.junhua.system.dto.view.DicDTO">
@@ -39,6 +40,6 @@
         select cdic.* from sys_dic pdic
         inner join sys_dic cdic on pdic.id = cdic.parent_id
         where pdic.dic_code = #{dicCode}
-        order by cdic.dic_order
+        order by cdic.sort
     </select>
 </mapper>

@@ -39,7 +39,7 @@ public class SysDic extends BaseEntity {
     private String dicCode;
 
     @ApiModelProperty("排序")
-    private Integer dicOrder;
+    private Integer sort;
 
     @ApiModelProperty("1有效，0禁用")
     private Integer dicStatus;
